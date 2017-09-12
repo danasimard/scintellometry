@@ -6,7 +6,7 @@
 # /_/    \_\_|  \_\\____/ \_____|_|  |_|_____|_|  |_|______|
 
 from __future__ import division
-import io
+import io, os
 
 import numpy as np
 from numpy.fft import fftfreq, fftshift

@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
             fh1.seek(nskip * recsize)
             rms = []
-            for j in xrange(nt):
+            for j in range(nt):
                 raw = fromfile(fh1, '4bit', recsize)
                 rms.append(raw.reshape(-1, 1024).std(1))
                 print("Set {}, rms_min,max={}, {}".format(j, rms[-1].min(),

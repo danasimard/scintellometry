@@ -131,7 +131,7 @@ class telescope(dict):
         fnbase = obs.get('fnbase', self.get('fnbase', None))
         file_fmt = obs.get('file_fmt', self.get('file_fmt', None))
         files = [file_fmt.format(fnbase, number)
-                 for number in xrange(first, last+1)]
+                 for number in range(first, last+1)]
         return (files,)
 
 

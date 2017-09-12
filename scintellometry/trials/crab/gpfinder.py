@@ -38,7 +38,7 @@ def rfi_filter_power(power, t0):
 
     sn = (freq_av-freq_av.mean()) / freq_av.std()
     # Loop to remove outliers from S/N calculation
-    for i in xrange(3):        
+    for i in range(3):        
         back = np.argwhere(sn < thresh)
         sn = (freq_av-freq_av[back].mean()) / freq_av[back].std()
 

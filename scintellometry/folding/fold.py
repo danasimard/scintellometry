@@ -349,7 +349,7 @@ def fold(fh, comm, samplerate, fedge, fedge_at_top, nchan,
 
         if do_waterfall:
             # # loop over corresponding positions in waterfall
-            # for iw in xrange(isr[0]//ntw, isr[-1]//ntw + 1):
+            # for iw in range(isr[0]//ntw, isr[-1]//ntw + 1):
             #     if iw < nwsize:  # add sum of corresponding samples
             #         waterfall[iw, :] += np.sum(power[isr//ntw == iw],
             #                                    axis=0)[ifreq]
