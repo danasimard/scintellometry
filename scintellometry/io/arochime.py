@@ -7,6 +7,7 @@
 
 from __future__ import division
 import io
+import os
 
 import numpy as np
 from numpy.fft import fftfreq, fftshift

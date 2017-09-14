@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # polyphase filter is filled in round-robin fashion, 1024 at a time,
     # 16 times.  So, just reshape(shape) gets that done.
     ppfdata = np.array([fppf(timedata[s-size//2:s+size//2].reshape(shape))
-                        for s in xrange(size//2, len(timedata)-size//2,
+                        for s in range(size//2, len(timedata)-size//2,
                                         shape[-1])])
     # check convolution -> same as multiplication in Fourier domain
     timedata_fft = rfft(timedata.reshape(-1, shape[-1]), axis=0)
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     # ippf.weights /= (fppf.weights.sum(0, keepdims=True) *
     #                  ippf.weights.sum(0, keepdims=True))
     timeback = np.array([ippf(inverse[s-8:s+8].reshape(shape))
-                        for s in xrange(8, inverse.shape[0]-8)])
+                        for s in range(8, inverse.shape[0]-8)])
     ippf_weights = np.zeros_like(inverse)
     ippf_weights[:shape[0]] = ippf.weights
     fppf_weights = np.zeros_like(inverse)

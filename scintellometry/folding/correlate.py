@@ -311,7 +311,7 @@ def correlate(fh1, fh2, dm, nchan, ngate, ntbin, nt, ntw,
         if do_waterfall:
             # loop over corresponding positions in waterfall
             isr = idx * nrows + np.arange(nrows)
-            for iw in xrange(isr[0] // ntw, isr[-1] // ntw + 1):
+            for iw in range(isr[0] // ntw, isr[-1] // ntw + 1):
                 if iw < nwsize:  # add sum of corresponding samples
                     waterfall[0:xpower.shape[1], iw] += \
                         np.abs(np.sum(xpower[isr // ntw == iw], axis=0))
@@ -329,7 +329,7 @@ def correlate(fh1, fh2, dm, nchan, ngate, ntbin, nt, ntw,
 
             # bin in the time series: 0..ntbin-1
             ibin = idx * ntbin // nt
-            for k in xrange(nchans):  # equally xpower.shape[1]
+            for k in range(nchans):  # equally xpower.shape[1]
                 foldspec[k, :, ibin] += np.bincount(iphase,
                                                     np.abs(xpower[:, k]),
                                                     ngate)

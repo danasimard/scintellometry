@@ -90,7 +90,7 @@ def vlbi_files(file_fmt, fnbase, first=0, **kwargs):
     """
     last = kwargs.get('last', first)
     files = [file_fmt.format(fnbase, number)
-             for number in xrange(int(first), int(last)+1)]
+             for number in range(int(first), int(last)+1)]
     return (files,)
 
 
@@ -102,7 +102,7 @@ def dada_files(file_fmt, fnbase, key, first, **kwargs):
     last = kwargs.get('last', first)
     filesize = kwargs.get('filesize', 640000000)
     files = [file_fmt.format(fnbase, key.replace('T', '-'), number)
-             for number in xrange(int(first), int(last)+1, int(filesize))]
+             for number in range(int(first), int(last)+1, int(filesize))]
     return (files,)
 
 

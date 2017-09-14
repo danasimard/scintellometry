@@ -380,7 +380,7 @@ class VDIFFrameHeader(object):
         if len(s) != 32:
             raise EOFError
         self = cls(eight_word_struct.unpack(s), edv, verify=False)
-        if not self.edv:
+        if self.edv is False:
             # Legacy headers are 4 words, so rewind, and remove excess data.
             fh.seek(-16, 1)
             self.data = self.data[:4]
