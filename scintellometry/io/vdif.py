@@ -1,4 +1,3 @@
-
 # __      __  _____    _   _____
 # \ \    / / | ___ \  | | |   __|
 #  \ \  / /  | |  | | | | |  |_
@@ -102,48 +101,48 @@ class VDIFData(SequentialFile):
             self.thread_ids = get_thread_ids(checkfile, header.framesize)
             self.nthread = len(self.thread_ids)
 
-        if header.nchan > 1:
-            # This needs more thought, though a single thread with multiple
-            # channels should be easy, as it is similar to other formats
-            # (just need to calculate frequencies).  But multiple channels
-            # over multiple threads may not be so easy.
-            raise ValueError("Multi-channel vdif not yet supported.")
+            if header.nchan > 1:
+                # This needs more thought, though a single thread with multiple
+                # channels should be easy, as it is similar to other formats
+                # (just need to calculate frequencies).  But multiple channels
+                # over multiple threads may not be so easy.
+                raise ValueError("Multi-channel vdif not yet supported.")
 
-        self.channels = channels
-        # For normal folding, 1 or 2 channels should be given, but for other
-        # reading, it may be useful to have all channels available.
-        if channels is None:
-            self.npol = self.nthread
-            self.thread_indices = range(self.nthread)
-        else:
-            self.thread_indices = [None] * self.nthread
-            try:
-                self.npol = len(channels)
-            except TypeError:
-                self.npol = 1
-                self.thread_indices[channels] = 0
+            self.channels = channels
+            # For normal folding, 1 or 2 channels should be given, but for other
+            # reading, it may be useful to have all channels available.
+            if channels is None:
+                self.npol = self.nthread
+                self.thread_indices = range(self.nthread)
             else:
-                for i, channel in enumerate(channels):
-                    self.thread_indices[channel] = i
+                self.thread_indices = [None] * self.nthread
+                try:
+                    self.npol = len(channels)
+                except TypeError:
+                    self.npol = 1
+                    self.thread_indices[channels] = 0
+                else:
+                    for i, channel in enumerate(channels):
+                        self.thread_indices[channel] = i
 
-        if not (1 <= self.npol <= 2):
-            warnings.warn("Should use 1 or 2 channels for folding!")
+            if not (1 <= self.npol <= 2):
+                warnings.warn("Should use 1 or 2 channels for folding!")
 
         # Decoder for given bits per sample; see bottom of file.
-        self._decode = DECODERS[header.bps, header['complex_data']]
+            self._decode = DECODERS[header.bps, header['complex_data']]
 
-        self.framesize = header.framesize
-        self.payloadsize = header.payloadsize
-        if blocksize is None:
-            blocksize = header.payloadsize
+            self.framesize = header.framesize
+            self.payloadsize = header.payloadsize
+            if blocksize is None:
+                blocksize = header.payloadsize
         # Each "virtual record" is one sample for every thread.
-        record_bps = header.bps * self.nthread
-        if record_bps in (1, 2, 4):
-            dtype = '{0}bit'.format(record_bps)
-        elif record_bps % 8 == 0:
-            dtype = '({0},)u1'.format(record_bps // 8)
-        else:
-            raise ValueError("VDIF with {0} bits per sample is not supported."
+            record_bps = header.bps * self.nthread
+            if record_bps in (1, 2, 4):
+                dtype = '{0}bit'.format(record_bps)
+            elif record_bps % 8 == 0:
+                dtype = '({0},)u1'.format(record_bps // 8)
+            else:
+                raise ValueError("VDIF with {0} bits per sample is not supported."
                              .format(header.bps))
         # SOMETHING LIKE THIS NEEDED FOR MULTIPLE FILES!
         # PROBABLY SHOULD MAKE SEQUENTIALFILE READER SEEK
@@ -154,12 +153,12 @@ class VDIFData(SequentialFile):
         # self.totalpayloads = (self.totalfilesizes // header.framesize *
         #                       header.payloadsize)
         # self.payloadranges = self.totalpayloads.cumsum()
-        self.time0 = header.time()
-        if header.bandwidth:
-            self.samplerate = header.bandwidth * 2.
-        else:  # bandwidth not known (e.g., legacy header)
-            frame_rate = get_frame_rate(checkfile, VDIFFrameHeader) * u.Hz
-            self.samplerate = ((header.payloadsize // 4) * (32 // header.bps) *
+            self.time0 = header.time()
+            if header.bandwidth:
+                self.samplerate = header.bandwidth * 2.
+            else:  # bandwidth not known (e.g., legacy header)
+                frame_rate = get_frame_rate(checkfile, VDIFFrameHeader) * u.Hz
+                self.samplerate = ((header.payloadsize // 4) * (32 // header.bps) *
                                frame_rate).to(u.MHz)
         if header['complex_data']:
             self.samplerate /= 2.
