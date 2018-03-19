@@ -5,6 +5,7 @@ import numpy as np
 import argparse
 
 from astropy.time import Time, TimeDelta
+import astropy.units as u
 
 from scintellometry.folding.fold import Folder, normalize_counts
 from scintellometry.folding.pmap import pmap
@@ -66,7 +67,12 @@ def reduce(telescope, obskey, tstart, tend, nchan, ngate, ntbin, ntw_min,
         time0 = fh.time0
         tstart = time0 if tstart is None else Time(tstart, scale='utc')
         if tstart < time0:
-            raise ValueError("Cowardly refusing to analyse with requested "
+            if time0 - tstart < 10*u.microsecond:
+                print("Warning: Changed start time {0} to start of file {1}.".
+                      format(tstart.iso,time0.iso))
+                tstart = time0
+            else:
+                raise ValueError("Cowardly refusing to analyse with requested "
                              "time {0} before start time {1}."
                              .format(tstart.iso, time0.iso))
         if tend is None:
