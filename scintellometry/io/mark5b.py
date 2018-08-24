@@ -8,7 +8,7 @@ import os
 import warnings
 
 import numpy as np
-from astropy.utils.compat.odict import OrderedDict
+from collections import OrderedDict
 from astropy.time import Time, TimeDelta
 import astropy.units as u
 

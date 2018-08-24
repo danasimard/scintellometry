@@ -130,7 +130,7 @@ class MultiFile(psrFITS):
         except u.UnitsError:
             offset = int(offset.to(u.byte).value)
         else:
-            offset = (offset/self.dtsample).to(u.dimensionless_unscaled)
+            offset = (offset/self.dtsample).to(u.dimensionless_unscaled).value
             offset = int(round(offset) * self.recordsize)
         self._seek(offset)
 

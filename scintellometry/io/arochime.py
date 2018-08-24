@@ -194,8 +194,8 @@ class AROCHIMEVdifData(SequentialFile):
 
         fh = vdif.open(raw_files[0], 'rs', sample_rate=samplerate)
         self.time0 = fh.tell(unit='time')
-        self.npol = fh.nthread
-        nchan = fh.nchan
+        self.npol = fh.sample_shape.nthread
+        nchan = fh.sample_shape.nchan
         self.samplerate = samplerate
         self.fedge_at_top = fedge_at_top
         if fedge.isscalar:
@@ -220,11 +220,11 @@ class AROCHIMEVdifData(SequentialFile):
 
         super(AROCHIMEVdifData, self).__init__(raw_files, blocksize, dtype, nchan,
                                            comm=comm)
-        if self.filesize % self.fh_raw.header0.framesize != 0:
+        if self.filesize % self.fh_raw.header0.frame_nbytes != 0:
             raise ValueError("File size is not an integer number of packets")
 
-        self.filesize = (self.filesize // self.fh_raw.header0.framesize *
-                         self.fh_raw.header0.payloadsize)
+        self.filesize = (self.filesize // self.fh_raw.header0.frame_nbytes *
+                         self.fh_raw.header0.payload_nbytes)
 
     def open(self, number=0):
         """Open a new file in the sequence.
