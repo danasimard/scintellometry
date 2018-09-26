@@ -294,7 +294,7 @@ def fold(fh, comm, samplerate, fedge, fedge_at_top, nchan,
                 fine = vals.reshape(-1, 1, npol)
 
             # Dedisperse.
-            fine *= dd_coh
+            fine *= np.array(dd_coh.value)
 
             # Still have fine.shape=(ntint, nchan, npol),
             # w/ nchan=1 for coherent.
